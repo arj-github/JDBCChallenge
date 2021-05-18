@@ -28,8 +28,7 @@ public class Main {
 		final String URL = "jdbc:mysql://localhost:3306/seadb?user=seauser&password=seapass";
 
 		try {
-			String prepared;
-			String injection;
+
 			Connection connection = DriverManager.getConnection(URL);
 			Statement statement = connection.createStatement();
 			PreparedStatement prepStatement; 
@@ -38,12 +37,12 @@ public class Main {
 
 			while (resultSet.next()) {
 				System.out.println("Es gibt " + resultSet.getInt(1) + " einträge in der Tabelle personen.");
-				System.out.println("delete from personen where id=6");
+				System.out.println("delete from personen where vorname in ('Patrik', 'uli')");
 				System.out.println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
 			}
 			
-			statement.execute("delete from personen where id=6");
-			
+			statement.execute("delete from personen where vorname in ('Patrik', 'uli') ");
+
 			resultSet = statement.executeQuery("select * from personen");
 			while (resultSet.next()) {
 				System.out.print(resultSet.getInt(1));
@@ -52,10 +51,10 @@ public class Main {
 				System.out.println(resultSet.getString(4));
 			}
 			
-			System.out.println("insert into personen (id, anrede, vorname, nachname) values (6,2,'uli','oli')");
+			System.out.println("insert into personen (id, anrede, vorname, nachname) values (6,2,'Patrik','oli')");
 			System.out.println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
 			
-			statement.execute("insert into personen (id, anrede, vorname, nachname) values (6,2,'uli','oli')");
+			statement.execute("insert into personen (id, anrede, vorname, nachname) values (6,2,'Patrik','oli')");
 			
 			resultSet = statement.executeQuery("select * from personen");
 			while (resultSet.next()) {
@@ -67,13 +66,48 @@ public class Main {
 			
 			
 			//INJECTION and PreparedStatement
-			var id = 7l;
+			var id = 9l;
 			Short anrede = 1;
-			var vorname = "Patrik)'; select * from personen;";
-			var nachname ="Alt)'; select * from personen;--'";
+			var vorname = "Patrik";
+			var nachname ="Blub');";
+			
+			String injection = "INSERT INTO personen ("
+					+ " id,"
+					+ " anrede,"
+					+ " vorname,"
+					+ " nachname ) VALUES ("
+					+ 10
+					+ ","
+					+ anrede
+					+ ", '"
+					+ vorname
+					+ "',"
+					+ "'"
+					+ nachname
+					+ "";
+					
+			// 	Vorbeugung der Injection!!! - Patrik Alt') wird als String und nicht sql-Abschluss interpr.
+			String prepQuery = "INSERT INTO personen ("
+					+ " id,"
+					+ " anrede,"
+					+ " vorname,"
+					+ " nachname ) VALUES ("
+					+ "?, ?, ?, ?)";
+			
+
+			
+			prepStatement = connection.prepareStatement(prepQuery);
+			prepStatement.setLong(1, id);
+			prepStatement.setShort(2, anrede);
+			prepStatement.setString(3, vorname);
+			prepStatement.setString(4, nachname);
+			prepStatement.executeUpdate();
 			
 			
-//			statement.execute("insert into personen (id, anrede, vorname, nachname) values (" + id + "," + anrede + ",'" + vorname + "'," + "'" + nachname +"'");
+			// Bei Injection wirkt Alt') als abschluss eines sqls
+			System.out.println(injection);
+			statement.execute(injection);
+
 			
 
 			resultSet = statement.executeQuery("select * from personen");
