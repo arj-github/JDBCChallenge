@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
 
 public class Main {
 
@@ -126,5 +127,112 @@ public class Main {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+/////////////////////////////////////
+
+// Arrays and Loops
+
+/////////////////////////////////////		
+
+		ArraysAndLoops aal = new ArraysAndLoops();
+		String[] beete = {"Blumenbeet", "Gemüsebeet"};
+		String[] blumen = new String[] { "Tulpe", "Pfingstrose", "Sonnenblume", "Rose" };
+		String[] gemuese = { "Tomate", "Gurke", "Karotte" };
+		Pflanze[] baeume = new Pflanze[] { new Pflanze("Apfel", true), new Pflanze("Birne", true) };
+
+		String[][] garten = { blumen, gemuese, beete };
+
+		System.out.println(gemuese[1]);
+		System.out.println(baeume[0]);
+		/*
+		 * Ausgabe Gurke Apfel Baum = true
+		 */
+
+		aal.arrayInStringUmwandeln(baeume);
+		/*
+		 * Ausgabe [Apfel Baum = true, Birne Baum = true]
+		 */
+
+		System.out.println(garten[0]);
+		/*
+		 * [Ljava.lang.String;@1ee0005
+		 */
+
+		System.out.println(Arrays.toString(garten[0]));
+		/*
+		 * [Tulpe, Pfingstrose, Sonnenblume]
+		 */
+
+		System.out.println(garten[0][2]);
+		/*
+		 * Sonnenblume
+		 */
+
+		System.out.println(garten.length); // 2
+		System.out.println(blumen.length); // 4
+		System.out.println(garten[0].length); // garten[0]=blumen -> 4
+
+// Dauerhaft umsortiert		
+		Arrays.sort(blumen);
+		System.out.println(Arrays.toString(garten[0]));
+// [Pfingstrose, Rose, Sonnenblume, Tulpe]
+		System.out.println(garten[0][0]);
+		System.out.println(blumen[0]);
+//Pfingstrose
+//Pfingstrose		
+
+// For
+		for (int i = 0; i < blumen.length; i++) {
+			System.out.println(blumen[i]);
+		}
+//Pfingstrose
+//Rose
+//Sonnenblume
+//Tulpe	
+
+		var i = 0;
+		while (++i != 10) {
+			System.out.print(i);
+		}
+//123456789
+
+// foreach - Array
+		for (String blume : blumen) {
+
+			System.out.println(blume);
+
+		}
+
+		// Rose
+		// Sonnenblume
+		// Tulpe
+
+		
+		// Iteration durch alle Beete und Pflanzen
+	
+		System.out.println("Mein Garten");
+		i=0;
+		for (int j=0; j<(garten.length-1) ; j++) {
+			System.out.println(garten[2][i++]);
+			for (String pflanze : (garten[j])) {
+
+				System.out.print(String.format(" %s", pflanze));
+				System.out.println();
+			}
+		
+		}
+//		Mein Garten
+//		Blumenbeet
+//		 Pfingstrose
+//		 Rose
+//		 Sonnenblume
+//		 Tulpe
+//		Gemüsebeet
+//		 Tomate
+//		 Gurke
+//		 Karotte
+		
 	}
+
 }
+// Class End
